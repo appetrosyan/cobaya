@@ -289,7 +289,8 @@ class mcmc(CovmatSampler):
     def set_proposer_covmat(self, load=False):
         if load:
             # Build the initial covariance matrix of the proposal, or load from checkpoint
-            self._covmat, where_nan = self._load_covmat(self.output.is_resuming())
+            self._covmat, where_nan = self._load_covmat(
+                prefer_load_old=self.output.is_resuming())
             if np.any(where_nan) and self.learn_proposal:
                 # We want to start learning the covmat earlier.
                 self.mpi_info("Covariance matrix " +
@@ -586,7 +587,7 @@ class mcmc(CovmatSampler):
 
     def check_convergence_and_learn_proposal(self):
         """
-        Checks the convergence of the sampling process (MPI only), and, if requested,
+        Checks the convergence of the sampling process, and, if requested,
         learns a new covariance matrix for the proposal distribution from the covariance
         of the last samples.
         """
@@ -771,9 +772,7 @@ class mcmc(CovmatSampler):
     def write_checkpoint(self):
         if is_main_process() and self.output:
             checkpoint_filename = self.checkpoint_filename()
-            covmat_filename = self.covmat_filename()
-            np.savetxt(covmat_filename, self.proposer.get_covariance(), header=" ".join(
-                list(self.model.parameterization.sampled_params())))
+            self.dump_covmat(self.proposer.get_covariance())
             checkpoint_info = {kinds.sampler: {self.get_name(): dict([
                 ("converged", bool(self.converged)),
                 ("Rminus1_last", self.Rminus1_last),
