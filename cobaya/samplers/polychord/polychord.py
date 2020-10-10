@@ -60,6 +60,11 @@ class polychord(Sampler):
                 self.log, "Could not find PolyChord. Check error message above. "
                           "To install it, run 'cobaya-install polychord --%s "
                           "[packages_path]'", _packages_path_arg)
+        try:
+            import supernest
+        except ImportError as e:
+            self.log('Supernest not installed')
+            
         # Prepare arguments and settings
         from pypolychord.settings import PolyChordSettings
         self.n_sampled = len(self.model.parameterization.sampled_params())

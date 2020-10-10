@@ -1,0 +1,39 @@
+likelihood:
+  gaussian_mixture:
+    means:
+    - 1
+    - 2
+    - 3
+    covs:
+    - - 0.1
+      - 0.05
+      - 0
+    - - 0.05
+      - 0.2
+      - 0
+    - - 0
+      - 0.05
+      - 0.1
+    derived: false
+params:
+  a:
+    prior:
+      min: -0.5
+      max: 3
+    latex: \alpha
+  b:
+    prior:
+      min: -5
+      max: 5
+    latex: \beta
+  c:
+    prior:
+      min: -10
+      max: 10
+    latex: \gamma
+sampler:
+  polychord:
+    num_repeats: 2d
+output: gaussian_ssim
+packages_path: /Users/app/Git/Cobaya-modules/
+test: false
