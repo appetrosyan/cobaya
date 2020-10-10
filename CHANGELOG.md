@@ -18,6 +18,11 @@
 
 - Collections are picklable again.
 - Slices with ommited limits, e.g. `[::2]`, now work.
+- Slicing now returns a copy of the `Collection`, instead of a raw `pandas.DataFrame`.
+
+### MCMC
+
+- Better MPI error handling: will now fail gracefully when called inside a user's script (as opposed to `cobaya-run`).
 
 
 ## 3.0  – 2020-05-12
